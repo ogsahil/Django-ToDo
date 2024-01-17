@@ -3,6 +3,7 @@ from home.models import Task
 # Create your views here.
 
 def home(request):
+    context ={'success' : False}
     if request.method == "POST":
         #handle the form
         title = request.POST['title']
@@ -10,8 +11,16 @@ def home(request):
         print(title, desc)
         ins = Task(tasktitle = title , taskdesc = desc)
         ins.save()
-    return render(request, 'home.html')
+        context ={'success' : True}
+    return render(request, 'home.html', context)
 
 
 def tasks(request):
-    return render(request, 'tasks.html')
+    allTask = Task.objects.all()
+    print(allTask)
+
+    for item in allTask:
+        print(item.taskdesc)
+    context = {'tasks' : allTask}
+
+    return render(request, 'tasks.html', context)
